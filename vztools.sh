@@ -32,7 +32,6 @@ updateCT()
         do
             echo "------- Updating ${CTID}"
 	    vzctl exec ${CTID} apt-get update
-            read -p "Press Enter to continue..."
         done
 }
 
@@ -86,10 +85,10 @@ case "$1" in
       memoryCT
       ;;
   version)
-      echo "___version :___"
+      echo "___Version :___"
       versionCT
       ;;
    *)
-      echo "Commandes disponibles: update upgrade memory"
+      echo "Available options: update upgrade memory"
 esac
 
