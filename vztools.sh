@@ -12,7 +12,7 @@ checkRequirements()
        exit 1
    fi
 
-    tools=( vzlist sed grep )
+    tools=( vzlist sed grep  tr)
     for tool in ${tools[@]} 
     do
         if which $tool >/dev/null; then
@@ -30,7 +30,7 @@ updateCT()
 {
     for CTID in ${CTIDS[@]}
         do
-            echo "------- Updating ${CTID}"
+            echo "- Updating ${CTID}"
 	    vzctl exec ${CTID} apt-get update
         done
 }
@@ -40,7 +40,7 @@ upgradeCT()
 {
      for CTID in ${CTIDS[@]}
         do  
-            echo "- Updating ${CTID}"
+            echo "- Upgrading ${CTID}"
             vzctl exec ${CTID} apt-get upgrade
             read -p "Press Enter to continue..."
         done
