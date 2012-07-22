@@ -1,7 +1,14 @@
 #!/bin/bash
-# -- vzsh : utilitaire de gestion de VM  _ Rémi J.
+#
+# Name: vztool
+#
+# Purpose: manage actions like update, upgrade, etc on all CT in a single command
+#
+# Note: Only for Debian ATM
+#
+          
 
-
+# -- Retrieve all running CT's ID
 CTIDS=($(vzlist -H -o veid | sed s/\ //g | tr '\n' ' '))
 
 # -- checkRequirements : Verify that all needed tools are presents
@@ -15,9 +22,7 @@ checkRequirements()
     tools=( vzlist sed grep  tr)
     for tool in ${tools[@]} 
     do
-        if which $tool >/dev/null; then
-            echo -e "\t${tool} exists -- Ok"
-        else
+        if !(which $tool >/dev/null); then
             echo -e "\t${tool} not found -- Error"
             exit 1
         fi
@@ -67,8 +72,8 @@ versionCT()
 }
 
 # -- Main 
-echo 'Vzsh v0.1'
-echo '---------'
+echo '  Vztools v0.1'
+echo '  ------------'
 checkRequirements
 
 case "$1" in
@@ -89,6 +94,10 @@ case "$1" in
       versionCT
       ;;
    *)
-      echo "Available options: update upgrade memory"
+      echo "  OPTIONS: "
+      echo "      update  --> Update"
+      echo "      upgrade --> Upgrade"
+      echo "      memory  --> Check memory"
+      echo "      version --> Check distro version"  
 esac
 
