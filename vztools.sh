@@ -19,7 +19,7 @@ checkRequirements()
        exit 1
    fi
 
-    tools=( vzlist sed grep  tr)
+    tools=( vzlist sed grep tr)
     for tool in ${tools[@]} 
     do
         if !(which $tool >/dev/null); then
@@ -71,6 +71,16 @@ versionCT()
         done
 }
 
+# -- dateCT : date of containers
+dateCT()
+{
+     for CTID in ${CTIDS[@]}
+        do  
+            echo -n "- Date ${CTID}:  "
+            vzctl exec ${CTID} date
+        done
+}
+
 # -- Main 
 echo '  Vztools v0.1'
 echo '  ------------'
@@ -85,6 +95,10 @@ case "$1" in
       echo "___Upgrading :___"
       upgradeCT
       ;;
+  date)
+      echo "___Date :___"
+      dateCT 
+      ;;
   memory)
       echo "___Memory :___"
       memoryCT
@@ -97,6 +111,7 @@ case "$1" in
       echo "  OPTIONS: "
       echo "      update  --> Update"
       echo "      upgrade --> Upgrade"
+      echo "      date --> Check date"  
       echo "      memory  --> Check memory"
       echo "      version --> Check distro version"  
 esac
