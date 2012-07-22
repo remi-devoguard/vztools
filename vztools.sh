@@ -1,15 +1,17 @@
 #!/bin/bash
 #
-# Name: vztool
+# Name: vztools
 #
 # Purpose: manage actions like update, upgrade, etc on all CT in a single command
 #
 # Note: Only for Debian ATM
 #
           
-
-# -- Retrieve all running CT's ID
-CTIDS=($(vzlist -H -o veid | sed s/\ //g | tr '\n' ' '))
+diff(){
+  awk 'BEGIN{RS=ORS=" "}
+       {NR==FNR?a[$0]++:a[$0]--}
+       END{for(k in a)if(a[k])print k}' <(echo -n "${!1}") <(echo -n "${!2}")
+}
 
 # -- checkRequirements : Verify that all needed tools are presents
 checkRequirements()
@@ -85,6 +87,15 @@ dateCT()
 echo '  Vztools v0.1'
 echo '  ------------'
 checkRequirements
+
+# -- Retrieve all running CT's ID
+CTIDS=($(vzlist -H -o veid | sed s/\ //g | tr '\n' ' '))
+
+if [ -e ".vzignore" ];then
+    ignoreCTID=($(cat .vzignore))
+    echo "  ->  .vzignore found ! Ignoring: ${ignoreCTID[@]}  <-    "
+    CTIDS=($(diff CTIDS[@] ignoreCTID[@]))
+fi
 
 case "$1" in
   update)
