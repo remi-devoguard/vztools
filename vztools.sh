@@ -6,7 +6,6 @@
 #
 # Note: Only for Debian ATM
 #
-          
 diff(){
   awk 'BEGIN{RS=ORS=" "}
        {NR==FNR?a[$0]++:a[$0]--}
@@ -38,7 +37,7 @@ updateCT()
     for CTID in ${CTIDS[@]}
         do
             echo "- Updating ${CTID}"
-	    vzctl exec ${CTID} apt-get update
+	    vzctl exec ${CTID} export HTTP_PROXY=${HTTP_PROXY}; apt-get update
         done
 }
 
@@ -48,7 +47,7 @@ upgradeCT()
      for CTID in ${CTIDS[@]}
         do  
             echo "- Upgrading ${CTID}"
-            vzctl exec ${CTID} apt-get upgrade
+	    vzctl exec ${CTID} export HTTP_PROXY=${HTTP_PROXY}; apt-get upgrade
             read -p "Press Enter to continue..."
         done
 }
